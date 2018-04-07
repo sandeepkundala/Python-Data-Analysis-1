@@ -85,17 +85,9 @@ def write_csv_from_list_dict(filename, table, fieldnames, separator, quote):
       given fieldnames.  The CSV file should use the given separator and
       quote characters.  All non-numeric fields will be quoted.
     """
-    table1 = []
-    for dit in table:
-        table2 = []
-        for fieldname in fieldnames:
-            table2.append(dit[fieldname])
-        table1.append(table2)
-
-    filename = open(filename, 'w', newline='')
-    #
-    csv_w = csv.writer(filename, delimiter=separator, quotechar=quote, quoting=csv.QUOTE_NONNUMERIC)
-    csv_w.writerow(fieldnames)
-    for dt2 in table1:
-        csv_w.writerow(dt2)
-    filename.close()
+    with open(filename, "wt", newline='') as csvfile:
+    csvwriter=csv.DictWriter(csvfile, delimiter=separator, quotechar=quote,
+                            quoting=csv.QUOTE_NONNUMERIC, fieldnames = fieldnames)
+    csvwriter.writeheader()
+    for row in table:
+        csvwriter.writerow(row)
